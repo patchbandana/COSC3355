@@ -1,8 +1,9 @@
-//Pat Eizenga
-//Operating Systems Program 3
-//3-26-25
-//Purpose: To practice using posix API calls on on files with parent and child processes
-//Version 1
+/* Pat Eizenga
+ *  3/26/24
+ *  Program 03
+ *  Purpose: This program uses the fork, wait, API POSIX calls to implement the
+ * functionality of the previous progrms. Fork calls a child process and 
+ */   
 
 #include <stdio.h>
 #include <stdlib.h>
