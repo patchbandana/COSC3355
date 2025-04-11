@@ -1,7 +1,10 @@
 /*  Pat Eizenga
  *  COSC3355.001
  *  4/11/2025
- *  Purpose: 
+ *  Purpose: To calculate a sum/series/sequence of prime numbers up to a specific integer input 
+ *      using console commands in linux. This program must utualize pthreads and a consumer
+ *       function in order to accomplish this. Initializers, synchronize API calls, semaphores and
+ *        making sure not to double count the sentinel values were all needed to debug
  */
 // Sources: man pages for pthreads and semaphores (used to learn pthreads/synchronization API calls)
 // Three Easy Pieces chapters
@@ -90,6 +93,7 @@ void* producer(void* arg) {
 // Consumer thread function
 void* consumer(void* arg) {
     int producers_finished = 0;
+    int finished[MAX_THREADS] = {0};  // Track if a producer is already counted as done
 
     while (1) {
         pthread_mutex_lock(&array_mutex);
@@ -113,8 +117,8 @@ void* consumer(void* arg) {
                 sum += prime_array[i];
                 prime_array[i] = SLOT_EMPTY;
                 pthread_cond_signal(&array_not_full[i]);  // Let the producer know the slot is free
-            } else if (prime_array[i] == -1) {
-                // Sentinel: this producer is done
+            } else if (prime_array[i] == -1 && !finished[i]) {
+                finished[i] = 1;
                 prime_array[i] = SLOT_EMPTY;
                 producers_finished++;
             }
